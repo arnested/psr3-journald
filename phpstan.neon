@@ -4,3 +4,6 @@ parameters:
     - .
   excludes_analyse:
     - vendor
+  autoload_files:
+    - example/class.inc
+    - example/function.inc

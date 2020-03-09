@@ -2,6 +2,7 @@
 <ruleset name="PHP_CodeSniffer">
   <rule ref="PSR12"/>
   <file>./example.php</file>
+  <file>./example/</file>
   <file>./src/</file>
   <file>./tests/</file>
 </ruleset>

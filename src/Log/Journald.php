@@ -34,10 +34,23 @@ class Journald extends AbstractLogger
     protected bool $ignoreMissingSystemd = false;
 
     /**
+     * @var bool $addCodeLocation
+     */
+    protected bool $addCodeLocation = false;
+
+    /**
      * Construct PSR-3 logger for journald.
      */
     public function __construct(array $options = [])
     {
+        if (array_key_exists('wrappers', $options) && is_array($options['wrappers'])) {
+            $this->wrappers = array_merge($this->wrappers, $options['wrappers']);
+        }
+
+        if (array_key_exists('add_code_location', $options) && is_bool($options['add_code_location'])) {
+            $this->addCodeLocation = $options['add_code_location'];
+        }
+
         if (array_key_exists('systemd_shared_object', $options) && is_string($options['systemd_shared_object'])) {
             $this->systemdSharedObject = $options['systemd_shared_object'];
         }
@@ -61,8 +74,9 @@ class Journald extends AbstractLogger
     /**
      * {@inheritdoc}
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
+        $exceptionLogged = false;
         $fields = [];
 
         if (isset($context['journald']) && is_array($context['journald'])) {
@@ -70,6 +84,7 @@ class Journald extends AbstractLogger
         }
 
         if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
+            $exceptionLogged = true;
             $fields[] = 'CODE_FILE=' . $context['exception']->getFile();
             $fields[] = 'CODE_LINE=' . $context['exception']->getLine();
 
@@ -77,6 +92,11 @@ class Journald extends AbstractLogger
                 $message = $context['exception']->getMessage();
             }
         }
+
+        if ($this->addCodeLocation && $location = $this->getCodeLocation($exceptionLogged)) {
+            $fields = array_merge($fields, $location);
+        }
+
 
         $this->journaldSend($this->logLevel($level), $message, $fields);
     }
@@ -152,5 +172,35 @@ class Journald extends AbstractLogger
         }
 
         return $level;
+    }
+
+    protected function getCodeLocation(bool $exceptionLogged): ?array
+    {
+        $limit = array_sum($this->wrappers) + 1;
+
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS | DEBUG_BACKTRACE_PROVIDE_OBJECT, $limit);
+        $result = null;
+
+        foreach ($backtrace as $call) {
+            if (
+                !array_key_exists('object', $call) ||
+                !in_array(get_class($call['object']), array_keys($this->wrappers))
+            ) {
+                $result[] = 'CODE_FUNC=%s';
+                $result[] = ($call['class'] ?? '') . ($call['type'] ?? '') . $call['function'] . '()';
+                break;
+            }
+
+            if (!$exceptionLogged) {
+                $result = [
+                    'CODE_LINE=%i',
+                    $call['line'],
+                    'CODE_FILE=%s',
+                    $call['file'],
+                ];
+            }
+        }
+
+        return $result;
     }
 }
