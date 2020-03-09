@@ -13,3 +13,11 @@ You also need to have systemd on the machine.
 ## Usage
 
 See [example.php](example.php).
+
+## TODO
+
+ * [ ] Handle placeholders in messages
+ * [ ] Add `CODE_FUNC`, `CODE_LINE`, and `CODE_FILE`
+ * [ ] Behave well when no systemd is present
+ * [ ] Documentation
+ * [ ] Tests
