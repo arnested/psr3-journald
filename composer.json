@@ -1,4 +1,5 @@
 {
+    "name": "arnested/psr3-journald",
     "license": "MIT",
     "authors": [
         {
