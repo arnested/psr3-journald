@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arnested\Log;
 
+use FFI\Exception as FFIException;
 use Psr\Log\AbstractLogger;
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
 
 class Journald extends AbstractLogger
@@ -10,17 +14,48 @@ class Journald extends AbstractLogger
     /**
      * @var \FFI $ffi
      */
-    protected $ffi;
+    protected ?\FFI $ffi = null;
+
+    /**
+     * @var array<string,int> $wrappers
+     */
+    protected array $wrappers = [
+        __CLASS__ => 3,
+    ];
+
+    /**
+     * @var string $systemdSharedObject
+     */
+    protected string $systemdSharedObject = 'libsystemd.so.0';
+
+    /**
+     * @var bool $ignoreMissingSystemd
+     */
+    protected bool $ignoreMissingSystemd = false;
 
     /**
      * Construct PSR-3 logger for journald.
      */
-    public function __construct()
+    public function __construct(array $options = [])
     {
-        $this->ffi = \FFI::cdef(
-            "int sd_journal_send(const char *format, ...);",
-            "libsystemd.so.0",
-        );
+        if (array_key_exists('systemd_shared_object', $options) && is_string($options['systemd_shared_object'])) {
+            $this->systemdSharedObject = $options['systemd_shared_object'];
+        }
+
+        if (array_key_exists('ignore_missing_systemd', $options) && is_bool($options['ignore_missing_systemd'])) {
+            $this->ignoreMissingSystemd = $options['ignore_missing_systemd'];
+        }
+
+        try {
+            $this->ffi = \FFI::cdef(
+                'int sd_journal_send(const char *format, ...);',
+                $this->systemdSharedObject,
+            );
+        } catch (FFIException $e) {
+            if (!$this->ignoreMissingSystemd) {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -67,6 +102,10 @@ class Journald extends AbstractLogger
             null,
         ];
 
+        if ($this->ignoreMissingSystemd && !method_exists($this->ffi, 'sd_journal_send')) {
+            return;
+        }
+
         $this->ffi->sd_journal_send(...$args);
     }
 
@@ -79,39 +118,39 @@ class Journald extends AbstractLogger
      * @return int
      *   The log level as an integer.
      */
-    protected function logLevel($loglevel): int
+    protected function logLevel($level): int
     {
-        if (is_int($loglevel)) {
-            return $loglevel;
+        $logLevels = [
+            LogLevel::EMERGENCY => 0,
+            LogLevel::ALERT => 1,
+            LogLevel::CRITICAL => 2,
+            LogLevel::ERROR => 3,
+            LogLevel::WARNING => 4,
+            LogLevel::NOTICE => 5,
+            LogLevel::INFO => 6,
+            LogLevel::DEBUG => 7,
+        ];
+
+        if (is_object($level) || method_exists($level, '__toString')) {
+            $level = (string) $level;
         }
 
-        switch ($loglevel) {
-            case LogLevel::EMERGENCY:
-                return 0;
-
-            case LogLevel::ALERT:
-                return 1;
-
-            case LogLevel::CRITICAL:
-                return 2;
-
-            case LogLevel::ERROR:
-                return 3;
-
-            case LogLevel::WARNING:
-                return 4;
-
-            case LogLevel::NOTICE:
-                return 5;
-
-            case LogLevel::INFO:
-                return 6;
-
-            case LogLevel::DEBUG:
-                return 7;
-
-            default:
-                throw new \LogicException("Unknown log level.");
+        if (is_string($level) && array_key_exists($level, $logLevels)) {
+            $level = $logLevels[$level];
         }
+
+        if (is_numeric($level)) {
+            $level = intval($level);
+        }
+
+        if (!is_int($level)) {
+            throw new InvalidArgumentException('Unknown log level');
+        }
+
+        if (($level < min($logLevels) || ($level > max($logLevels)))) {
+            throw new InvalidArgumentException('Log level out of range');
+        }
+
+        return $level;
     }
 }

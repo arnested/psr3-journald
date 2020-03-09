@@ -17,8 +17,14 @@
             "Arnested\\": "src"
         }
     },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ]
+    },
     "require-dev": {
         "phpstan/phpstan": "^0.12.14",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpunit/phpunit": "^9.0"
     }
 }
