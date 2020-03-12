@@ -36,4 +36,9 @@ try {
     $logger->error(null, ['exception' => $t]);
 }
 
+$logger->debug('Hello {location}. We are logging with {foo}.', [
+    'location' => 'world',
+    'foo' => 'placeholders',
+]);
+
 printf("To view the log entries run:\n\n$ journalctl -o json-pretty _PID=%s\n", getmypid());

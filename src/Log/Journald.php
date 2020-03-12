@@ -63,19 +63,39 @@ class Journald extends AbstractLogger
      */
     public function log($level, $message, array $context = array())
     {
+        $exception = null;
         $fields = [];
+
+        if ($message instanceof \Throwable) {
+            $exception = $message;
+            $message = $exception->getMessage();
+        }
+
+        if (is_object($message) || method_exists($message, '__toString')) {
+            $message = (string) $message;
+        }
+
+        if (!is_string($message)) {
+            $message = '';
+        }
 
         if (isset($context['journald']) && is_array($context['journald'])) {
             $fields = $context['journald'];
         }
 
         if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
-            $fields[] = 'CODE_FILE=' . $context['exception']->getFile();
-            $fields[] = 'CODE_LINE=' . $context['exception']->getLine();
+            $exception = $context['exception'];
+            $fields[] = 'CODE_FILE=' . $exception->getFile();
+            $fields[] = 'CODE_LINE=' . $exception->getLine();
 
             if ($message === null) {
                 $message = $context['exception']->getMessage();
             }
+        }
+
+        foreach ($this->getPlaceholdes($message, $context) as $placeholder) {
+            $fields[] = 'MESSAGE_PLACEHOLDERS=%s';
+            $fields[] = $placeholder;
         }
 
         $this->journaldSend($this->logLevel($level), $message, $fields);
@@ -152,5 +172,34 @@ class Journald extends AbstractLogger
         }
 
         return $level;
+    }
+
+    /**
+     * Extract placeholders and their values.
+     *
+     * @param string $message
+     *   The message string with placeholders.
+     * @param array $context
+     *   The context array with the placeholder values.
+     *
+     * @return array<string>
+     *   An array with the placeholder/values pairs.
+     */
+    protected function getPlaceholdes(string $message, array $context): array
+    {
+        preg_match_all("/{([A-Za-z0-9_\.]+)}/", $message, $matches);
+
+        $placeholders = [];
+
+        foreach ($matches[1] as $placeholder) {
+            if (!array_key_exists($placeholder, $context)) {
+                // The placeholder is not present in the context array. Ignore.
+                continue;
+            }
+
+            $placeholders[] = "{$placeholder}={$context[$placeholder]}";
+        }
+
+        return $placeholders;
     }
 }
