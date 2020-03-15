@@ -48,6 +48,16 @@ class Journald extends AbstractLogger
             $message = $exception->getMessage();
         }
 
+        if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
+            $exception = $context['exception'];
+            $fields[] = 'CODE_FILE=' . $exception->getFile();
+            $fields[] = 'CODE_LINE=' . $exception->getLine();
+
+            if ($message === null) {
+                $message = $context['exception']->getMessage();
+            }
+        }
+
         if (is_object($message) || method_exists($message, '__toString')) {
             $message = (string) $message;
         }
@@ -58,16 +68,6 @@ class Journald extends AbstractLogger
 
         if (isset($context['journald']) && is_array($context['journald'])) {
             $fields = $context['journald'];
-        }
-
-        if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
-            $exception = $context['exception'];
-            $fields[] = 'CODE_FILE=' . $exception->getFile();
-            $fields[] = 'CODE_LINE=' . $exception->getLine();
-
-            if ($message === null) {
-                $message = $context['exception']->getMessage();
-            }
         }
 
         foreach ($this->getPlaceholdes($message, $context) as $placeholder) {
