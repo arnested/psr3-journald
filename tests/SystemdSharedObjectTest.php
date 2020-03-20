@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace Arnested\Log;
 
 use Arnested\Log\Journald;
-use PHPUnit\Framework\TestCase;
+use Arnested\Log\Journald\Sender;
+use Arnested\Log\Journald\TestSender;
 use FFI\Exception as FFIException;
+use PHPUnit\Framework\TestCase;
 
 class SystemdSharedObjectTest extends TestCase
 {
 
-    public function testInvalidSharedObject(): void
+    public function testInvalidOrMisisingSystemdSharedObject(): void
     {
         try {
-            new Journald(['systemd_shared_object' => 'invalid so file']);
+            $sender = new Sender('foo bar baz.so.0');
+            new Journald($sender);
 
             // An exception _should_ be trown above so fail if we
             // actually reach here.
@@ -27,10 +30,8 @@ class SystemdSharedObjectTest extends TestCase
     public function testIgnoreFfiException(): void
     {
         try {
-            new Journald([
-                'systemd_shared_object' => 'invalid so file',
-                'ignore_missing_systemd' => true,
-            ]);
+            $sender = new TestSender();
+            new Journald($sender);
             $this->assertTrue(true);
         } catch (\Throwable $t) {
             $this->assertNotInstanceOf(FFIException::class, $t);
