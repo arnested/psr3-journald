@@ -41,4 +41,4 @@ $logger->debug('Hello {location}. We are logging with {foo}.', [
     'foo' => 'placeholders',
 ]);
 
-printf("To view the log entries run:\n\n$ journalctl -o json-pretty _PID=%s\n", getmypid());
+printf("To view the log entries run:\n\n$ journalctl -o json-pretty _UID=%s _PID=%s\n", posix_getuid(), getmypid());

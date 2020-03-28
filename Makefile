@@ -7,13 +7,13 @@ lint: phpcs phpstan
 test: phpunit
 
 phpcs:
-	vendor/bin/phpcs
+	-vendor/bin/phpcs -s
 
 phpunit:
-	vendor/bin/phpunit
+	-vendor/bin/phpunit
 
 phpstan:
-	vendor/bin/phpstan analyse
+	-vendor/bin/phpstan analyse
 
 example:
 	php example.php
