@@ -18,6 +18,6 @@ See [example.php](example.php).
 
  * [x] Handle placeholders in messages
  * [ ] Add `CODE_FUNC`, `CODE_LINE`, and `CODE_FILE`
- * [ ] Behave well when no systemd is present
+ * [x] Behave well when no systemd is present
  * [ ] Documentation
  * [ ] Tests

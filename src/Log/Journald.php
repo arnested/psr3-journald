@@ -7,6 +7,8 @@ namespace Arnested\Log;
 use Arnested\Log\Journald\LogLevel;
 use Arnested\Log\Journald\Sender;
 use Arnested\Log\Journald\SenderInterface;
+use Arnested\Log\Journald\SystemdException;
+use FFI\Exception as FFIException;
 use Psr\Log\AbstractLogger;
 
 class Journald extends AbstractLogger
@@ -25,11 +27,18 @@ class Journald extends AbstractLogger
 
     /**
      * Construct PSR-3 logger for journald.
+     *
+     * @throws \Arnested\Log\Journald\SystemdException
+     *   If we could not instantiate a FFI systemd object.
      */
     public function __construct(?SenderInterface $sender = null)
     {
         if (!$sender instanceof SenderInterface) {
-            $sender = new Sender();
+            try {
+                $sender = new Sender();
+            } catch (FFIException $e) {
+                throw new SystemdException($e->getMessage(), $e->getCode(), $e);
+            }
         }
 
         $this->sender = $sender;
