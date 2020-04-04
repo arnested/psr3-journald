@@ -16,8 +16,8 @@ See [example.php](example.php).
 
 ## TODO
 
- * [x] Handle placeholders in messages
- * [ ] Add `CODE_FUNC`, `CODE_LINE`, and `CODE_FILE`
- * [x] Behave well when no systemd is present
- * [ ] Documentation
- * [ ] Tests
+* [x] Handle placeholders in messages
+* [ ] Add `CODE_FUNC`, `CODE_LINE`, and `CODE_FILE`
+* [x] Behave well when no systemd is present
+* [ ] Documentation
+* [ ] Tests
