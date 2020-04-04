@@ -6,13 +6,22 @@ lint: phpcs phpstan markdownlint
 
 test: phpunit
 
-phpcs:
+vendor/bin/phpcs:
+	composer install
+
+phpcs: vendor/bin/phpcs
 	-vendor/bin/phpcs -s
 
-phpunit:
+vendor/bin/phpunit:
+	composer install
+
+phpunit: vendor/bin/phpunit
 	-vendor/bin/phpunit
 
-phpstan:
+vendor/bin/phpstan:
+	composer install
+
+phpstan: vendor/bin/phpstan
 	-vendor/bin/phpstan analyse
 
 node_modules/.bin/markdownlint:
