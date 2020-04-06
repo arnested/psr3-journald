@@ -11,7 +11,7 @@ class Sender implements SenderInterface
     /**
      * @var \FFI $ffi
      */
-    protected ?\FFI $ffi = null;
+    protected \FFI $ffi;
 
     public function __construct(string $sharedObject = 'libsystemd.so.0')
     {
@@ -24,7 +24,7 @@ class Sender implements SenderInterface
     /**
      * {@inheritDoc}
      */
-    public function send(array $args)
+    public function send(array $args): void
     {
         $this->ffi->sd_journal_send(...$args);
     }

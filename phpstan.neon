@@ -1,6 +1,10 @@
 parameters:
-  level: 1
+  level: max
   paths:
     - .
   excludes_analyse:
     - vendor
+  ignoreErrors:
+    -
+      message: '/Call to an undefined method FFI::sd_journal_send\(\)\./'
+      path: src/Log/Journald/Sender.php

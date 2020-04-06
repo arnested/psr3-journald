@@ -16,7 +16,7 @@ class TestSender implements SenderInterface
     /**
      * {@inheritDoc}
      */
-    public function send(array $args)
+    public function send(array $args): void
     {
         $this->fields = $args;
     }
