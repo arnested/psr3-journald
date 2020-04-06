@@ -45,7 +45,11 @@ class Journald extends AbstractLogger
     }
 
     /**
-     * {@inheritdoc}
+     * @param int|string|object $level
+     * @param string|object|null $message
+     * @param array<mixed> $context
+     *
+     * @return void
      */
     public function log($level, $message, array $context = array())
     {
@@ -67,7 +71,7 @@ class Journald extends AbstractLogger
             }
         }
 
-        if (is_object($message) || method_exists($message, '__toString')) {
+        if (is_object($message) && method_exists($message, '__toString')) {
             $message = (string) $message;
         }
 
@@ -96,7 +100,7 @@ class Journald extends AbstractLogger
      *   The logging level.
      * @param string $message
      *   The log message
-     * @param array<string> $fields
+     * @param array<mixed> $fields
      *   The fields to log to journald.
      */
     protected function journaldSend(int $level, string $message, array $fields): void
@@ -118,7 +122,7 @@ class Journald extends AbstractLogger
      *
      * @param string $message
      *   The message string with placeholders.
-     * @param array $context
+     * @param array<mixed> $context
      *   The context array with the placeholder values.
      *
      * @return array<string>

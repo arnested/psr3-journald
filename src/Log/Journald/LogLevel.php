@@ -50,7 +50,7 @@ class LogLevel
     {
         // If we have an object with a __toString() method we cat cast
         // the object to a string for further processing.
-        if (is_object($level) || method_exists($level, '__toString')) {
+        if (is_object($level) && method_exists($level, '__toString')) {
             $level = (string) $level;
         }
 

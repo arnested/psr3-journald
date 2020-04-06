@@ -7,7 +7,7 @@ namespace Arnested\Log\Journald;
 interface SenderInterface
 {
     /**
-     * @param array<string> $args
+     * @param array<mixed> $args
      */
-    public function send(array $args);
+    public function send(array $args): void;
 }
