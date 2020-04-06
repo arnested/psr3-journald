@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arnested\Log;
 
+use Arnested\Log\Journald\CodeLocation;
 use Arnested\Log\Journald\LogLevel;
 use Arnested\Log\Journald\Sender;
 use Arnested\Log\Journald\SenderInterface;
@@ -23,6 +24,7 @@ class Journald extends AbstractLogger
      */
     protected array $wrappers = [
         __CLASS__ => 3,
+        'Psr\Log\AbstractLogger' => 1,
     ];
 
     /**
@@ -71,6 +73,11 @@ class Journald extends AbstractLogger
             }
         }
 
+        if (!$exception instanceof \Throwable) {
+            $codeLocation = CodeLocation::new($this->wrappers);
+            $fields = array_merge($fields, $codeLocation->toFields());
+        }
+
         if (is_object($message) && method_exists($message, '__toString')) {
             $message = (string) $message;
         }
@@ -80,7 +87,7 @@ class Journald extends AbstractLogger
         }
 
         if (isset($context['journald']) && is_array($context['journald'])) {
-            $fields = $context['journald'];
+            $fields = array_merge($fields, $context['journald']);
         }
 
         foreach ($this->getPlaceholdes($message, $context) as $placeholder) {
