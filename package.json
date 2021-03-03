@@ -6,6 +6,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "markdownlint-cli": "^0.26.0"
+    "markdownlint-cli": "^0.27.1"
   }
 }
