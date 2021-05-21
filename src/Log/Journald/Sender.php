@@ -26,6 +26,7 @@ class Sender implements SenderInterface
      */
     public function send(array $args): void
     {
+        // @phpstan-ignore-next-line
         $this->ffi->sd_journal_send(...$args);
     }
 }
