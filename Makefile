@@ -1,8 +1,8 @@
-.PHONY: test lint phpunit phpcs phpstan markdownlint all example install
+.PHONY: test lint phpunit phpcs phpstan all example install
 
 all: test lint
 
-lint: phpcs phpstan markdownlint
+lint: phpcs phpstan
 
 test: phpunit
 
@@ -26,12 +26,6 @@ vendor/bin/phpstan:
 
 phpstan: vendor/bin/phpstan
 	-vendor/bin/phpstan analyse
-
-node_modules/.bin/markdownlint:
-	npm install
-
-markdownlint: node_modules/.bin/markdownlint
-	-node_modules/.bin/markdownlint .
 
 example:
 	php example.php
