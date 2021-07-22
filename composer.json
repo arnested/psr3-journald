@@ -1,5 +1,9 @@
 {
     "name": "arnested/psr3-journald",
+    "type": "library",
+    "description": "PSR-3 logging to systemd's journald",
+    "keywords":  ["psr-3", "log", "systemd", "journald", "ffi"],
+    "homepage": "https://github.com/spejder/odoo-client",
     "license": "MIT",
     "authors": [
         {
