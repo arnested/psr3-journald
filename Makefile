@@ -13,13 +13,13 @@ vendor/bin/phpcs:
 	composer install
 
 phpcs: vendor/bin/phpcs
-	-vendor/bin/phpcs -s
+	-vendor/bin/phpcs -s -p --colors
 
 vendor/bin/phpunit:
 	composer install
 
 phpunit: vendor/bin/phpunit
-	-vendor/bin/phpunit
+	-vendor/bin/phpunit --color
 
 vendor/bin/phpstan:
 	composer install
