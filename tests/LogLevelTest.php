@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arnested\Log;
 
 use Arnested\Log\Journald;
+use Arnested\Log\Journald\LogLevel as JournaldLogLevel;
 use Arnested\Log\Journald\TestSender;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\InvalidArgumentException;
@@ -58,16 +59,35 @@ class LogLevelTest extends TestCase
         }
     }
 
-    public function testLogLevelKnownString(): void
+    /**
+     * @dataProvider provideLogLevelKnownLevel
+     */
+    public function testLogLevelKnownLevel(string $psr3Level, int $journaldLevel): void
     {
         try {
             $sender = new TestSender();
             $logger = new Journald($sender);
-            $logger->log(LogLevel::DEBUG, 'Foo');
-
+            $logger->log($psr3Level, $psr3Level);
             $this->assertTrue(true);
         } catch (\Throwable $t) {
             $this->assertNotInstanceOf(InvalidArgumentException::class, $t);
         }
+    }
+
+    /**
+     * @return array<string, array<int|string>>
+     */
+    public function provideLogLevelKnownLevel(): array
+    {
+        $map = [];
+
+        foreach (JournaldLogLevel::PSR3_MAP as $psr3Level => $journaldLevel) {
+            $map["{$psr3Level} => {$journaldLevel}"] = [
+                $psr3Level,
+                $journaldLevel,
+            ];
+        }
+
+        return $map;
     }
 }

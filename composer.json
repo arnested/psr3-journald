@@ -2,7 +2,7 @@
     "name": "arnested/psr3-journald",
     "type": "library",
     "description": "PSR-3 logging to systemd's journald",
-    "keywords":  ["psr3", "psr-3", "log", "systemd", "journald", "ffi"],
+    "keywords":  ["psr3", "psr-3", "log", "logger", "systemd", "journald", "ffi"],
     "homepage": "https://github.com/arnested/psr3-journald",
     "license": "MIT",
     "authors": [
@@ -12,6 +12,9 @@
             "homepage": "https://arnested.dk"
         }
     ],
+    "provide": {
+        "psr/logger-implementation": "1.0.0"
+    },
     "require": {
         "php": ">=7.4",
         "psr/log": "^1.0"
@@ -33,5 +36,9 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-symfony": "^0.12.33",
         "phpstan/phpstan-deprecation-rules": "^0.12.6"
+    },
+    "config": {
+        "sort-packages": true,
+        "lock": false
     }
 }

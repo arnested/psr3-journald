@@ -19,13 +19,6 @@ class Journald extends AbstractLogger
     protected SenderInterface $sender;
 
     /**
-     * @var array<string,int> $wrappers
-     */
-    protected array $wrappers = [
-        __CLASS__ => 3,
-    ];
-
-    /**
      * Construct PSR-3 logger for journald.
      *
      * @throws \Arnested\Log\Journald\SystemdException
