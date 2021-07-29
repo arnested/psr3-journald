@@ -13,7 +13,7 @@
         }
     ],
     "provide": {
-        "psr/logger-implementation": "1.0.0"
+        "psr/log-implementation": "1.0.0"
     },
     "require": {
         "php": ">=7.4",
