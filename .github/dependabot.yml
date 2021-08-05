@@ -1,17 +1,15 @@
 version: 2
 updates:
 - package-ecosystem: github-actions
-  directory: "/"
+  directory: /
   schedule:
-    interval: daily
+    interval: monthly
     timezone: Europe/Copenhagen
-  open-pull-requests-limit: 10
 - package-ecosystem: composer
-  directory: "/"
+  directory: /
   schedule:
-    interval: daily
+    interval: monthly
     timezone: Europe/Copenhagen
-  open-pull-requests-limit: 10
   allow:
   - dependency-type: direct
   - dependency-type: indirect
