@@ -10,7 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class InterfaceTest extends TestCase
 {
-
     public function testImplementingInterface(): void
     {
         $logger = new Journald();

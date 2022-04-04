@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class SystemdSharedObjectTest extends TestCase
 {
-
     public function testInvalidOrMisisingSystemdSharedObject(): void
     {
         try {

@@ -9,7 +9,6 @@ use Psr\Log\LogLevel as PSR3LogLevel;
 
 class LogLevel
 {
-
     public const EMERGENCY = 0;
     public const ALERT = 1;
     public const CRITICAL = 2;
