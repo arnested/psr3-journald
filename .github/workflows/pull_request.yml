@@ -5,7 +5,7 @@ jobs:
     name: PHP
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup PHP, with composer and extensions
       uses: shivammathur/setup-php@v2
       with:
@@ -34,6 +34,6 @@ jobs:
     name: Markdown
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: markdownlint
       uses: actionshub/markdownlint@main
