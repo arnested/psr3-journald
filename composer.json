@@ -39,6 +39,9 @@
     },
     "config": {
         "sort-packages": true,
-        "lock": false
+        "lock": false,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     }
 }
