@@ -40,4 +40,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: markdownlint
-      uses: DavidAnson/markdownlint-cli2-action@v10
+      uses: DavidAnson/markdownlint-cli2-action@v11
