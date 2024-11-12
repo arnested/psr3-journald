@@ -31,7 +31,7 @@ class SystemdSharedObjectTest extends TestCase
         try {
             $sender = new TestSender();
             new Journald($sender);
-            $this->assertTrue(true);
+            $this->addToAssertionCount(1);  // does not throw an exception
         } catch (\Throwable $t) {
             $this->assertNotInstanceOf(FFIException::class, $t);
         }

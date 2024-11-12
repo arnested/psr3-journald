@@ -128,7 +128,7 @@ class Journald extends AbstractLogger
         $placeholders = [];
 
         foreach ($matches[1] as $placeholder) {
-            if (!array_key_exists($placeholder, $context)) {
+            if (!array_key_exists($placeholder, $context) || !is_string($context[$placeholder])) {
                 // The placeholder is not present in the context array. Ignore.
                 continue;
             }
