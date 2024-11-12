@@ -67,7 +67,7 @@ class LogLevelTest extends TestCase
             $sender = new TestSender();
             $logger = new Journald($sender);
             $logger->log($psr3Level, $psr3Level);
-            $this->assertTrue(true);
+            $this->addToAssertionCount(1);  // does not throw an exception
         } catch (\Throwable $t) {
             $this->assertNotInstanceOf(InvalidArgumentException::class, $t);
         }

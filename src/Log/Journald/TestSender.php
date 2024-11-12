@@ -9,7 +9,7 @@ use Arnested\Log\Journald\SenderInterface;
 class TestSender implements SenderInterface
 {
     /**
-     * @var array<string> $fields
+     * @var array<mixed> $fields
      */
     protected array $fields;
 
