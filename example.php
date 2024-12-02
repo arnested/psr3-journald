@@ -33,7 +33,7 @@ try {
     // Logging an exception will set CODE_FILE and CODE_LINE from the
     // Exception. If the log message is NULL the message will be
     // extracted from the exception.
-    $logger->log(LogLevel::ERROR, null, ['exception' => $t]);
+    $logger->log(LogLevel::ERROR, '', ['exception' => $t]);
 }
 
 $logger->debug('Hello {location}. We are logging with {foo}.', [

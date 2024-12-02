@@ -38,38 +38,25 @@ class Journald extends AbstractLogger
     }
 
     /**
-     * @param int|string|object $level
-     * @param string|object|null $message
-     * @param array<mixed> $context
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, string|\Stringable $message, array $context = array()): void
     {
         $exception = null;
         $fields = [];
-
-        if ($message instanceof \Throwable) {
-            $exception = $message;
-            $message = $exception->getMessage();
-        }
 
         if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
             $exception = $context['exception'];
             $fields[] = 'CODE_FILE=' . $exception->getFile();
             $fields[] = 'CODE_LINE=' . $exception->getLine();
 
-            if ($message === null) {
+            if (empty($message)) {
                 $message = $context['exception']->getMessage();
             }
         }
 
-        if (is_object($message) && method_exists($message, '__toString')) {
+        if ($message instanceof \Stringable) {
             $message = (string) $message;
-        }
-
-        if (!is_string($message)) {
-            $message = '';
         }
 
         if (isset($context['journald']) && is_array($context['journald'])) {

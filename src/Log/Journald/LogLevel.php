@@ -35,9 +35,9 @@ class LogLevel
     /**
      * Helper to convert Psr\Log\LogLevel's to journald integer level.
      *
-     * @param int|string|object $level The log level as an int, a
-     *   string (with a numeric value), or an object with a
-     *   __toString() method giving a numeric value.
+     * @param mixed $level The log level as an int, a string (with a
+     *   numeric value), or an object with a __toString() method
+     *   giving a numeric value.
      *
      * @throws \Psr\Log\InvalidArgumentException
      *   If the level could not be parsed or is out of bounds.
@@ -47,9 +47,9 @@ class LogLevel
      */
     public static function normalize($level): int
     {
-        // If we have an object with a __toString() method we cat cast
-        // the object to a string for further processing.
-        if (is_object($level) && method_exists($level, '__toString')) {
+        // If we have a Stringable object we can cast the object to a
+        // string for further processing.
+        if ($level instanceof \Stringable) {
             $level = (string) $level;
         }
 
