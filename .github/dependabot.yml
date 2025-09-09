@@ -1,15 +1,16 @@
+---
 version: 2
 updates:
-- package-ecosystem: github-actions
-  directory: /
-  schedule:
-    interval: monthly
-    timezone: Europe/Copenhagen
-- package-ecosystem: composer
-  directory: /
-  schedule:
-    interval: monthly
-    timezone: Europe/Copenhagen
-  allow:
-  - dependency-type: direct
-  - dependency-type: indirect
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+      timezone: Europe/Copenhagen
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: monthly
+      timezone: Europe/Copenhagen
+    allow:
+      - dependency-type: direct
+      - dependency-type: indirect
