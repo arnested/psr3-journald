@@ -6,15 +6,29 @@ permissions:
   contents: read
 
 jobs:
+  php-versions:
+    name: Lookup PHP versions
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.versions.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: antfroger/php-version-action@v1
+        id: versions
+
   review_codestyle:
     name: PHP
     runs-on: ubuntu-24.04
+    needs: php-versions
+    strategy:
+      matrix:
+        php-version: ${{ fromJSON(needs.php-versions.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v5
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: ${{ matrix.php-version }}
           coverage: none
           tools: composer:v2
       - name: Validate composer.json
