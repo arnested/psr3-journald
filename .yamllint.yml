@@ -1,0 +1,10 @@
+---
+
+extends: default
+
+ignore-from-file:
+  - .gitignore
+
+rules:
+  truthy:
+    check-keys: false

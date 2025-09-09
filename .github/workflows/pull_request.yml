@@ -1,3 +1,4 @@
+---
 on: pull_request
 name: Linting, analysis, tests
 
@@ -9,35 +10,36 @@ jobs:
     name: PHP
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v5
-    - name: Setup PHP, with composer and extensions
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 8.1
-        coverage: none
-        tools: composer:v2
-    - name: Validate composer.json
-      run: |
-        composer validate --no-check-all --no-check-publish
-    - name: Install composer dependencies
-      run: |
-        composer install --no-interaction --no-progress
-        # Add vendor/bin to PATH for subsequent steps, see https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
-        composer config bin-dir --absolute >> "${GITHUB_PATH}"
-    - name: phpunit
-      run: |
-        phpunit
-    - name: phpstan
-      run: |
-        phpstan
-    - name: phpcs
-      run: |
-        phpcs
+      - uses: actions/checkout@v5
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+          tools: composer:v2
+      - name: Validate composer.json
+        run: |
+          composer validate --no-check-all --no-check-publish
+      - name: Install composer dependencies
+        run: |
+          composer install --no-interaction --no-progress
+          # Add vendor/bin to PATH for subsequent steps, see
+          # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
+          composer config bin-dir --absolute >> "${GITHUB_PATH}"
+      - name: phpunit
+        run: |
+          phpunit
+      - name: phpstan
+        run: |
+          phpstan
+      - name: phpcs
+        run: |
+          phpcs
 
   markdown_lint:
     name: Markdown
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v5
-    - name: markdownlint
-      uses: DavidAnson/markdownlint-cli2-action@v20
+      - uses: actions/checkout@v5
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v20
