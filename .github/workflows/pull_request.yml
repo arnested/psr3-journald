@@ -7,7 +7,7 @@ permissions:
 jobs:
   review_codestyle:
     name: PHP
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v5
     - name: Setup PHP, with composer and extensions
@@ -36,7 +36,7 @@ jobs:
 
   markdown_lint:
     name: Markdown
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v5
     - name: markdownlint
