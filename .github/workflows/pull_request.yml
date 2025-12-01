@@ -56,4 +56,4 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: markdownlint
-        uses: DavidAnson/markdownlint-cli2-action@v20
+        uses: DavidAnson/markdownlint-cli2-action@v21
